@@ -57,6 +57,14 @@ summary(bomberos)
 nulos=aggr(bomberos)
 summary(nulos)
 
+## ANALISIS DESCRIPTIVO
+## PATRONES DE COMPORTAMIENTO
+## -> SI SE DA, SE PUEDE HACER CLUSTERING
+## LIBRERIA 'MAPS' CONVERTIR COORDENADAS A LUGAR
+## UTILIZAR KMEANS (GENERAR GRUPOS)
+## CONSTRUIR TARGET -> A PARTIR DEL TIPO DE EMERGENCIA
+## CONSTRUIR MODELOS PARA CADA EMERGENCIA (9)
+
 #No se observan datos nulos
 
 ## COERSION
@@ -119,17 +127,9 @@ summary(bomberos)
 #####
 #tranversal, longitudinal <= se diferencia a traves del tiempo
 
-bomberos1 <- bomberos 
-particion = createDataPartition(y = bomberos1$tipoemergencia, p = 0.7, list = FALSE, times = 1)
-train = bomberos1[particion,]
-test = bomberos1[-particion,]
-dim(train)
-dim(test)
-
-## DECISION TREE MODEL
-
-modelo1 = rpart(Mora~.,data=train, method = "class", minsplit=0, cp=0.0019)
-
+bomberos1 <- bomberos[3,4:8]
+summary(bomberos)
+dim(bomberos)
 
 
 
