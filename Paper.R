@@ -213,11 +213,10 @@ for (k in 2:10){
 }
 
 plot(2:10, wss,type="b")
-=======
-bomberos1 <- bomberos[3,4:8]
+
+  bomberos1 <- bomberos[3,4:8]
 summary(bomberos)
 dim(bomberos)
->>>>>>> 56c625399cb47cfa1ba7e896902342cec54d0f59
 
 wss2=numeric()
 for (k in 2:10){
@@ -229,6 +228,9 @@ for (k in 2:10){
 plot(2:10, wss2,type="b")
 
 fviz_nbclust(bomberos, FUNcluster=kmeans, method="silhouette")+theme_classic()
+
+
+
 
 
 
