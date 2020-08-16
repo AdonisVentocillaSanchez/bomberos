@@ -28,6 +28,7 @@ library(cluster)
 library(PerformanceAnalytics)
 library(psych)
 library(factoextra)
+library(lattice)
 
 # Entendimiento de la data - 24 Datos
 # numeroparte: Identificador de reporte
@@ -82,9 +83,9 @@ summary(nulos)
 # Obtenemos las variable fechaparte para convertirlo a fecha
 # Eliminamos todos los puntos dentro de cada variable
 bomberos$fechaparte = gsub("[.]", "\\1", bomberos$fechaparte)
-#convertimos a fecha con zona horaria de peru
+# convertimos a fecha con zona horaria de peru
 bomberos$fechaparte <- dmy_hms(bomberos$fechaparte, tz = "America/Lima")
-#Verificamos la clase de tipo fecha - "POSIXct" "POSIXt"
+# Verificamos la clase de tipo fecha - "POSIXct" "POSIXt"
 class(bomberos$fechaparte)
 summary(bomberos$fechaparte)
 
@@ -104,19 +105,25 @@ bomberos %>%
   ggplot(aes(x = dia_semana)) +
   geom_bar()
 
-#Convertimos a factor
+# Convertimos a factor
 bomberos$codigotipoemergencia <- as.factor(bomberos$codigotipoemergencia)
 summary(bomberos$codigotipoemergencia)
 str(bomberos$codigotipoemergencia)
+tipo_emergencia
 par(mfrow=c(2,1))
 boxplot(bomberos$codigotipoemergencia, horizontal=TRUE, main = "Códigos por tipo de emergencia")
 hist(bomberos$codigotipoemergencia, main = "")
 
-#Convertimos a factor
+# Convertimos a factor
 bomberos$tipoemergencia <- as.factor(bomberos$tipoemergencia)
 summary(bomberos$tipoemergencia)
 str(bomberos$tipoemergencia)
 
+tipoemergencia_porcentaje<- as.numeric(round(((prop.table(table(bomberos$tipoemergencia)))*100),2))
+tipoemergencia_tags<- c("ACCIDENTE VEHICULAR", "DESASTRES NATURALES", "EMERGENCIA MEDICA", "INCENDIO", "MATERIALES PELIGROSOS (INCIDENTE)", "RESCATE", "SERVICIO ESPECIAL")
+tipoemergencia_tags<- paste(tipoemergencia_tags, tipoemergencia_porcentaje)
+tipoemergencia_tags<- paste(tipoemergencia_tags, "%", sep = " ")
+pie(tipoemergencia_porcentaje, tipoemergencia_tags, main = "Tipo de Emergencia")
 tipoemergencia_bars<- ggplot(bomberos, aes(x="", fill=tipoemergencia))+
   geom_bar(width = 1, stat = "identity")
 tipoemergencia_bars
@@ -127,46 +134,46 @@ tipoemergencia_circular + scale_fill_brewer("Tipos de emergencia") +
   geom_text(aes(y = tipoemergencia/7 + c(0, cumsum(tipoemergencia)[-length(tipoemergencia)]), 
                 label = percent(tipoemergencia/100)), size=5)
 
-#Convertimos a factor
+# Convertimos a factor
 bomberos$tipoemergenciacompleto <- as.factor(bomberos$tipoemergenciacompleto)
 summary(bomberos$tipoemergenciacompleto)
 str(bomberos$tipoemergenciacompleto)
 
-#Convertimos a factor  
+# Convertimos a factor  
 bomberos$distrito <- as.factor(bomberos$distrito)
 summary(bomberos$distrito)
 str(bomberos$distrito)
 
-#Convertimos a factor
+# Convertimos a factor
 bomberos$ubigeo <- as.factor(bomberos$ubigeo)
 summary(bomberos$ubigeo)
 str(bomberos$ubigeo)
 
-#Convertimos a factor
+# Convertimos a factor
 bomberos$codigoestado <- as.factor(bomberos$codigoestado)
 summary(bomberos$codigoestado)
 str(bomberos$codigoestado)
 
-#Convertimos a factor
+# Convertimos a factor
 bomberos$codigomodulo <- as.factor(bomberos$codigomodulo)
 summary(bomberos$codigomodulo)
 str(bomberos$codigomodulo)
 
-#Convertimos a factor
+# Convertimos a factor
 bomberos$estadoregistro <- as.factor(bomberos$estadoregistro)
 summary(bomberos$estadoregistro)
 str(bomberos$estadoregistro)
 
-#Convertimos a números de coordenadas aceptados añadiendo un punto "." a todos los números despues de 2 dígitos
+# Convertimos a números de coordenadas aceptados añadiendo un punto "." a todos los números despues de 2 dígitos
 bomberos$longitud <- str_c(substr(bomberos$longitud, 1, stop = 3), substr(bomberos$longitud, 4, stop = nchar(bomberos$longitud)), sep = ".")
-#convertimos a tipo numerico
+# convertimos a tipo numerico
 bomberos$longitud <- as.numeric(bomberos$longitud)
 bomberos$longitud
 summary(bomberos$longitud)
 
-#Convertimos a números de coordenadas aceptados añadiendo un punto "." a todos los números despues de 2 dígitos
+# Convertimos a números de coordenadas aceptados añadiendo un punto "." a todos los números despues de 2 dígitos
 bomberos$latitud <- str_c(substr(bomberos$latitud, 1, stop = 3), substr(bomberos$latitud, 4, stop = nchar(bomberos$latitud)), sep = ".")
-#Convertimos a tipo numerico
+# convertimos a tipo numerico
 bomberos$latitud = as.numeric(bomberos$latitud)
 bomberos$latitud
 summary(bomberos$latitud)
@@ -176,10 +183,10 @@ bomberos$vehiculos <- as.array(bomberos$vehiculos)
 summary(bomberos$vehiculos)
 str(bomberos$vehiculos)
 
-## Separamos la variable 'vehiculos'
-bomberos=bomberos[1:11]
 
-summary(bomberos)
+# Selecion de datos
+bomberos1=bomberos[, c(1:2,6,10:11)]
+summary(bomberos1)
 
 #####
 #data= 70%
