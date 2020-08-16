@@ -29,6 +29,7 @@ library(PerformanceAnalytics)
 library(psych)
 library(factoextra)
 library(lattice)
+library(xlsx)
 
 # Entendimiento de la data - 24 Datos
 # numeroparte: Identificador de reporte
@@ -184,9 +185,11 @@ summary(bomberos$vehiculos)
 str(bomberos$vehiculos)
 
 
+write.xlsx(bomberos, "./bomberosnew.xlsx")
+
 # Selecion de datos
-bomberos1=bomberos[, c(1:2,6,10:11)]
-summary(bomberos1)
+bomberos1=bomberos[, c(1,3,6,10:11)]
+summary(bomberos)
 
 #####
 #data= 70%
@@ -194,47 +197,52 @@ summary(bomberos1)
 #####
 #tranversal, longitudinal <= se diferencia a traves del tiempo
 
-<<<<<<< HEAD
-bomberos1 <- bomberos[,1:8]
-summary(bomberos1)
-dim(bomberos1)
 
-## PRIMER DIA
-bomberos %>%
-  filter(fechaparte < ymd(20190408)) %>%
-  ggplot(aes(fechaparte)) +
-  geom_freqpoly(binwidth = 3600) # 600 segundos = 10 minutos
-
-
-
-## plot data
-plot(bomberos)
-summary(bomberos)
 
 library(cluster)
 wss=numeric()
 for (k in 2:10){
   set.seed(111)
-  agrupamiento=kmeans(bomberos$codigotipoemergencia, k)
+  agrupamiento=kmeans(bomberos1$codigotipoemergencia, k)
   wss[k-1]=agrupamiento$tot.withinss
 }
 
 plot(2:10, wss,type="b")
 
-  bomberos1 <- bomberos[3,4:8]
-summary(bomberos)
-dim(bomberos)
+#####
 
 wss2=numeric()
 for (k in 2:10){
   set.seed(111)
-  agrupamiento=kmeans(bomberos$ubigeo, k)
+  agrupamiento=kmeans(bomberos1$tipoemergencia, k)
   wss2[k-1]=agrupamiento$tot.withinss
 }
 
 plot(2:10, wss2,type="b")
 
-fviz_nbclust(bomberos, FUNcluster=kmeans, method="silhouette")+theme_classic()
+fviz_nbclust(bomberos1, FUNcluster=kmeans, method="silhouette")+theme_classic()
+
+?kmeans
+
+barplot(table(bomberos1$ubigeo))
+
+
+### 
+install.packages("ggmap")
+
+library(ggmap)
+
+map = get_map(c(bomberos1$longitud, bomberos1$latitud))
+
+?get_map
+
+head(bomberos1)
+
+## modelo de pronostico
+
+
+
+
 
 
 
